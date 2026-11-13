@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f4f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        h1 { text-align: center; color: #222; }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .cards {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            flex: 1;
+            min-width: 140px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        form, table {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+
+        input, select, button {
+            padding: 12px;
+            margin: 7px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        table { border-collapse: collapse; }
+
+        td, th {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .income { color: green; }
+        .expense { color: red; }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Personal Expense Tracker</h1>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Income</h3>
+            <h2 class="income">₹{{ income }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Total Expense</h3>
+            <h2 class="expense">₹{{ expenses }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Balance</h3>
+            <h2>₹{{ balance }}</h2>
+        </div>
+    </div>
+
+    <form action="/add" method="POST">
+        <h2>Add Transaction</h2>
+
+        <input type="text" name="title"
+               placeholder="Transaction Name" required>
+
+        <input type="number" name="amount"
+               placeholder="Amount" min="0.01"
+               step="0.01" required>
+
+        <select name="category">
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+        </select>
+
+        <button type="submit">Add Transaction</button>
+    </form>
+
+    <h2>Transaction History</h2>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Action</th>
+        </tr>
+
+        {% for item in transactions %}
+        <tr>
+            <td>{{ item.title }}</td>
+            <td>₹{{ item.amount }}</td>
+            <td>{{ item.category }}</td>
+            <td>
+                <a href="/delete/{{ item.id }}"
+                   onclick="return confirm('Delete this transaction?')">
+                   Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+</body>
+</html>
